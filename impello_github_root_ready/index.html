@@ -375,7 +375,8 @@
     payload['_files']=filesPayload;
 
     try{
-      const res=await fetch('/api/send-smtp',{
+      const res=await fetch('/api/send-smtp',{// TEMP: bypass email to confirm serverless works
+// return res.status(200).json({ok:true, bypass:true});
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify(payload)
