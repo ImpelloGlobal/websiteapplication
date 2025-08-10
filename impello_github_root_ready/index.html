@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Impello Global – Trade Credit Insurance Application</title>
+  <style>
+    :root{ --brand:#0B4D8F; --accent:#1F78D1; --bg:#f5f7fa; --text:#1b2634; --muted:#5a6b7f; --border:#e6ecf4; --error:#b00020; --radius:14px; }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif; line-height:1.45;}
+    .wrap{max-width:900px;margin:0 auto;padding:16px 12px;}
+    h1,h2,h3{color:#0B4D8F;margin:0 0 10px 0}
+    .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin:14px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+    label{font-size:.95rem;color:#3a4655}
+    input[type="text"],input[type="email"],input[type="tel"],input[type="url"],input[type="number"],input[type="date"],textarea,select{
+      width:100%;padding:10px 12px;border:1px solid #dbe3ee;border-radius:10px;background:#fff;outline:none;
+    }
+    input:focus,textarea:focus,select:focus{border-color:#0B4D8F;box-shadow:0 0 0 2px rgba(11,77,143,.12)}
+    textarea{min-height:90px}
+    fieldset{border:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+    .col-12{grid-column:span 12}.col-6{grid-column:span 6}.col-4{grid-column:span 4}.col-3{grid-column:span 3}
+    @media (max-width:820px){fieldset{grid-template-columns:repeat(6,1fr)} .col-6,.col-4,.col-3,.col-12{grid-column:span 6}}
+    .hint{font-size:.85rem;color:var(--muted)}
+    .btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer}
+    .btn.primary{background:#0B4D8F;color:#fff} .btn.secondary{background:#eef4fb;color:#0B4D8F}
+    .btnlink{background:none;border:none;color:#0B4D8F;cursor:pointer;font-weight:600}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .required:after{content:" *";color:var(--error)}
+    .error{color:var(--error);font-size:.9rem;margin-top:6px;display:none}
+    .hidden{display:none !Important}
+    .badge{display:inline-block;background:#eef5ff;color:#0B4D8F;padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:600}
+    .table{width:100%;border-collapse:collapse}.table th,.table td{border:1px solid var(--border);padding:8px;font-size:.9rem}
+    .table th{background:#f8fbff;text-align:left}
+    .progress{height:6px;background:#eef3f9;border-radius:999px;overflow:hidden;margin-bottom:14px}
+    .progress > div{height:100%;width:0;background:linear-gradient(90deg,#0B4D8F,#1F78D1);transition:width .3s ease}
+    .header-compact{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+    .logo{height:34px;width:auto}
+    .success{padding:12px;background:#effaf1;border:1px solid #caefd3;border-radius:10px;color:#225b2a}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header-compact">
+      <img class="logo" src="https://impelloglobal.com/wp-content/uploads/2023/11/impello-logo-blue.png" alt="Impello Global">
+      <h1 style="margin:0">Trade Credit Insurance Application</h1>
+    </div>
+    <div class="hint" style="margin-bottom:8px">Secure, mobile-friendly form. Fields marked with * are required.</div>
+
+    <div class="card">
+      <div class="progress"><div id="progressBar"></div></div>
+      <div><span class="badge" id="stepBadge">Step 1 of 6</span></div>
+
+      <form id="appForm" enctype="multipart/form-data" novalidate>
+        <input type="text" name="company_website" id="hp" class="hidden" tabindex="-1" autocomplete="off" />
+
+        <!-- Step 1: Applicant Info -->
+        <section class="card" data-step="1">
+          <h2>1) Applicant’s Information</h2>
+          <fieldset>
+            <div class="col-6"><label class="required">Company Name</label><input type="text" name="company_name" required></div>
+            <div class="col-6"><label>Website</label><input type="url" name="website" placeholder="https://"></div>
+            <div class="col-8"><label class="required">Address</label><input type="text" name="address" required></div>
+            <div class="col-4"><label>Telephone</label><input type="tel" name="telephone"></div>
+            <div class="col-4"><label class="required">Primary Contact</label><input type="text" name="primary_contact" required></div>
+            <div class="col-4"><label class="required">E-mail</label><input type="email" name="email" required></div>
+            <div class="col-12"><label class="required">Business Description</label><textarea name="business_description" required></textarea></div>
+            <div class="col-6">
+              <label class="required">Sales Mix (%)</label>
+              <div style="display:flex; gap:8px">
+                <input style="flex:1" type="number" min="0" max="100" name="sales_domestic_pct" placeholder="Domestic %" required>
+                <input style="flex:1" type="number" min="0" max="100" name="sales_foreign_pct" placeholder="Foreign %" required>
+              </div>
+              <div class="hint">Domestic % + Foreign % should ≈ 100%</div>
+            </div>
+            <div class="col-12"><label>Products/services sold and source countries</label><textarea name="products_and_sources" placeholder="List products/services and countries sourced from"></textarea></div>
+            <div class="col-12">
+              <label>Parent / Subsidiary / Affiliate for which coverage is requested</label>
+              <table class="table" id="affiliatesTable">
+                <thead><tr><th>Company Name</th><th>Address</th><th>Relationship</th><th></th></tr></thead>
+                <tbody></tbody>
+              </table>
+              <button class="btn secondary" type="button" onclick="addAffiliate()">Add Company</button>
+            </div>
+            <div class="col-4"><label class="required">Coverage requested for</label>
+              <select name="coverage_scope" required>
+                <option value="" selected disabled>Choose one</option>
+                <option>Domestic sales</option><option>Foreign sales</option><option>Both</option>
+              </select>
+            </div>
+            <div class="col-4"><label>Years selling on credit terms (Domestic)</label><input type="number" name="years_credit_domestic" min="0"></div>
+            <div class="col-4"><label>Years selling on credit terms (Export)</label><input type="number" name="years_credit_export" min="0"></div>
+            <div class="col-12">
+              <label class="required">Primary reason for interest</label>
+              <div>
+                <label><input type="radio" name="reason" value="Risk Mitigation" required> Risk Mitigation</label> &nbsp;
+                <label><input type="radio" name="reason" value="Financing" required> Financing</label> &nbsp;
+                <label><input type="radio" name="reason" value="Other" required> Other</label>
+              </div>
+              <input type="text" name="reason_other" placeholder="If Other, please explain">
+            </div>
+            <div class="col-12"><label>If using for financing, provide facility details</label>
+              <textarea name="financing_details" placeholder="Loan structure, advance rate, collateral, lender name, desired outcome"></textarea>
+            </div>
+            <div class="col-12"><label>Do you currently have a credit insurance policy?</label>
+              <select name="has_policy"><option>No</option><option>Yes</option></select>
+              <input type="text" name="policy_details" placeholder="Insurer name, expiration date">
+            </div>
+          </fieldset>
+        </section>
+
+        <!-- Step 2: Sales & Loss Information -->
+        <section class="card" data-step="2">
+          <h2>2) Sales & Loss Information</h2>
+          <div class="hint">Enter sales and bad debt for the last 4 years and projected next 12 months.</div>
+          <div id="salesRepeater"></div>
+          <button class="btn secondary" type="button" onclick="addSalesRow()">Add Year</button>
+
+          <fieldset style="margin-top:10px">
+            <div class="col-6"><label>Max outstanding receivables (Domestic)</label><input type="number" name="max_outstanding_domestic" min="0" step="0.01"></div>
+            <div class="col-6"><label>Max outstanding receivables (Foreign)</label><input type="number" name="max_outstanding_foreign" min="0" step="0.01"></div>
+            <div class="col-12"><label>Are sales seasonal? If so, provide details</label><textarea name="seasonality"></textarea></div>
+          </fieldset>
+
+          <h3>Projected buyer credit limits (next 12 months)</h3>
+          <table class="table" id="creditLimitTable">
+            <thead><tr><th>Credit Limit Band (USD)</th><th>Domestic Accounts</th><th>Foreign Accounts</th></tr></thead>
+            <tbody>
+              <tr><td>0 – 25,000</td><td><input type="number" name="cl_0_25_dom" min="0"></td><td><input type="number" name="cl_0_25_for" min="0"></td></tr>
+              <tr><td>25,001 – 50,000</td><td><input type="number" name="cl_25_50_dom" min="0"></td><td><input type="number" name="cl_25_50_for" min="0"></td></tr>
+              <tr><td>50,001 – 100,000</td><td><input type="number" name="cl_50_100_dom" min="0"></td><td><input type="number" name="cl_50_100_for" min="0"></td></tr>
+              <tr><td>100,001 – 250,000</td><td><input type="number" name="cl_100_250_dom" min="0"></td><td><input type="number" name="cl_100_250_for" min="0"></td></tr>
+              <tr><td>250,001 – 500,000</td><td><input type="number" name="cl_250_500_dom" min="0"></td><td><input type="number" name="cl_250_500_for" min="0"></td></tr>
+              <tr><td>500,001 – 1,000,000</td><td><input type="number" name="cl_500_1m_dom" min="0"></td><td><input type="number" name="cl_500_1m_for" min="0"></td></tr>
+              <tr><td>Over 1,000,000</td><td><input type="number" name="cl_over_1m_dom" min="0"></td><td><input type="number" name="cl_over_1m_for" min="0"></td></tr>
+            </tbody>
+          </table>
+
+          <h3>Largest Domestic Buyers (up to 5)</h3>
+          <table class="table" id="domesticBuyers">
+            <thead><tr><th>Buyer Name / City / State</th><th>Prior Year Shipment Volume ($)</th><th>Payment Term</th><th>Credit Limit Needed ($)</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <button class="btn secondary" type="button" onclick="addBuyerRow('domesticBuyers')">Add Domestic Buyer</button>
+
+          <h3 style="margin-top:16px">Largest Foreign Buyers (up to 5)</h3>
+          <table class="table" id="foreignBuyers">
+            <thead><tr><th>Buyer Name / City / Country</th><th>Prior Year Shipment Volume ($)</th><th>Payment Term</th><th>Credit Limit Needed ($)</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <button class="btn secondary" type="button" onclick="addBuyerRow('foreignBuyers')">Add Foreign Buyer</button>
+
+          <fieldset>
+            <div class="col-12"><label>Total domestic receivables outstanding (provide aging)</label><textarea name="domestic_aging" placeholder="As of [date]: Current, 1–30, 31–90, 91–180, 181–360, Over 360"></textarea></div>
+            <div class="col-12"><label>Placed any past-due domestic accounts (&gt;$100k) with collections in last 12 months? Provide details</label><textarea name="domestic_collections"></textarea></div>
+            <div class="col-12"><label>Domestic losses (past 3 years): year, amount, number of losses, largest loss, reason</label><textarea name="domestic_losses"></textarea></div>
+            <div class="col-12"><label>Total foreign receivables outstanding (provide aging)</label><textarea name="foreign_aging"></textarea></div>
+            <div class="col-12"><label>Placed any past-due foreign accounts (&gt;$100k) with collections in last 12 months? Provide details</label><textarea name="foreign_collections"></textarea></div>
+            <div class="col-12"><label>Foreign losses (past 3 years): year, amount, number of losses, largest loss, reason</label><textarea name="foreign_losses"></textarea></div>
+          </fieldset>
+        </section>
+
+        <!-- Step 3: Credit & Collection Procedures -->
+        <section class="card" data-step="3">
+          <h2>3) Credit & Collection Procedures</h2>
+          <fieldset>
+            <div class="col-12"><label>How is credit assessed/approved? (dept, roles, authorities, order vs term)</label><textarea name="credit_approval_details"></textarea></div>
+            <div class="col-4"><label>Formal written credit policy?</label><select name="has_credit_policy"><option>No</option><option>Yes</option></select></div>
+            <div class="col-12"><label>Information required to approve/renew a credit limit</label><textarea name="credit_limit_requirements"></textarea></div>
+            <div class="col-4"><label>Obtain financial statements from customers?</label><select name="obtain_financials"><option>No</option><option>Yes</option></select></div>
+            <div class="col-12"><label>If yes, when required and how often updated/reviewed</label><textarea name="financials_policy"></textarea></div>
+            <div class="col-4"><label>How often are credit limits reviewed?</label><input type="text" name="credit_limit_review_frequency" placeholder="e.g., quarterly"></div>
+            <div class="col-12"><label>Credit monitoring policies (aging reviews, prior-to-ship checks, etc.)</label><textarea name="credit_monitoring_policies"></textarea></div>
+            <div class="col-12"><label>Collection process (demand timing, stop-ship, agency, etc.)</label><textarea name="collection_process"></textarea></div>
+          </fieldset>
+        </section>
+
+        <!-- Step 4: Uploads -->
+        <section class="card" data-step="4">
+          <h2>4) Upload Supporting Documents</h2>
+          <p class="hint">Include: (a) last two year-end financial statements + most recent quarterly with prior-year comparison; (b) current A/R aging report; (c) formal credit procedures (if available); (d) product brochure (if available).</p>
+          <fieldset>
+            <div class="col-12"><label>Attachments (PDF, DOCX, XLSX, CSV, PNG, JPG) – max 10MB each</label><input type="file" name="attachments" id="attachments" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.png,.jpg,.jpeg"></div>
+          </fieldset>
+        </section>
+
+        <!-- Step 5: Broker of Record & Notices -->
+        <section class="card" data-step="5">
+          <h2>5) Broker of Record & Notices</h2>
+          <fieldset>
+            <div class="col-12">
+              <label><input type="checkbox" name="bor_appoint" required> We appoint <strong>Impello Global Insurance Services, LLC</strong> as our exclusive broker of record for trade credit insurance until cancelled in writing.</label>
+              <div class="hint">Required to proceed.</div>
+            </div>
+            <div class="col-12"><div class="hint"><strong>Notice:</strong> It is a crime to knowingly provide false, incomplete or misleading information to an insurance company for the purpose of defrauding the company.</div></div>
+          </fieldset>
+        </section>
+
+        <!-- Step 6: Declaration & Signature -->
+        <section class="card" data-step="6">
+          <h2>6) Declaration & Signature</h2>
+          <fieldset>
+            <div class="col-12"><p>I declare that the information provided is true and complete to the best of my knowledge.</p></div>
+            <div class="col-4"><label class="required">Signer's Name (print)</label><input type="text" name="signer_name" required></div>
+            <div class="col-4"><label class="required">Title</label><input type="text" name="signer_title" required></div>
+            <div class="col-4"><label class="required">Date</label><input type="date" name="sign_date" required></div>
+            <div class="col-12"><label>Company</label><input type="text" name="sign_company"></div>
+            <div class="col-12"><label><input type="checkbox" name="consent" required> I agree to the <a href="https://impelloglobal.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a> and consent to be contacted regarding this application.</label></div>
+          </fieldset>
+        </section>
+
+        <div class="actions">
+          <button type="button" class="btn secondary" id="prevBtn">Back</button>
+          <button type="button" class="btn primary" id="nextBtn">Next</button>
+          <button type="submit" class="btn primary hidden" id="submitBtn">Submit Application</button>
+          <span class="hint" id="saveHint">Progress saves locally until you submit.</span>
+        </div>
+
+        <div class="error" id="formError">Please correct the highlighted fields and try again.</div>
+        <div id="successMsg" class="success hidden">Thank you! Your application has been submitted.</div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  function postSize(){ try{ parent.postMessage({type:'impello-form-height',height:document.body.scrollHeight}, '*'); }catch(e){} }
+  const ro = new ResizeObserver(postSize); ro.observe(document.body); window.addEventListener('load', postSize);
+
+  const sections=[...document.querySelectorAll('section.card[data-step]')];
+  let step=1; const total=sections.length;
+  const stepBadge=document.getElementById('stepBadge');
+  const progress=document.getElementById('progressBar');
+  const prevBtn=document.getElementById('prevBtn');
+  const nextBtn=document.getElementById('nextBtn');
+  const submitBtn=document.getElementById('submitBtn');
+  const form=document.getElementById('appForm');
+  const saveKey='impello_app_draft_v5';
+
+  function showStep(i){
+    step=i;
+    sections.forEach(s=>s.style.display=(+s.dataset.step===step)?'block':'none');
+    stepBadge.textContent=`Step ${step} of ${total}`;
+    progress.style.width=(step-1)/(total-1)*100+'%';
+    prevBtn.style.display = (step===1)?'none':'inline-flex';
+    nextBtn.classList.toggle('hidden', step===total);
+    submitBtn.classList.toggle('hidden', step!==total);
+    window.scrollTo({top:0,behavior:'smooth'});
+    postSize();
+  }
+  prevBtn.addEventListener('click',()=>showStep(Math.max(1,step-1)));
+  nextBtn.addEventListener('click',()=>{ if(!validateSection(step)) return; showStep(Math.min(total,step+1)); });
+
+  function validateSection(stepNum){
+    const current=sections.find(s=>+s.dataset.step===stepNum);
+    const required=[...current.querySelectorAll('[required]')];
+    let ok=true;
+    required.forEach(el=>{
+      el.classList.remove('invalid');
+      if(el.type==='checkbox' || el.type==='radio'){
+        const anyChecked = !!form.querySelector(`[name="${el.name}"]:checked`);
+        if(!anyChecked){ ok=false; }
+      }else if(!el.value){ ok=false; }
+      if(!ok) el.style.borderColor = ok ? '#dbe3ee' : '#b00020';
+    });
+    document.getElementById('formError').style.display = ok ? 'none' : 'block';
+    return ok;
+  }
+
+  function saveDraft(){
+    const fd=new FormData(form);
+    const obj={};
+    fd.forEach((v,k)=>{
+      if(v instanceof File) return;
+      if(obj[k]){ if(!Array.isArray(obj[k])) obj[k]=[obj[k]]; obj[k].push(v); }
+      else obj[k]=v;
+    });
+    localStorage.setItem(saveKey, JSON.stringify(obj));
+  }
+  function restoreDraft(){
+    const raw=localStorage.getItem(saveKey); if(!raw) return;
+    const obj=JSON.parse(raw);
+    Object.entries(obj).forEach(([k,v])=>{
+      const el=form.elements[k]; if(!el) return;
+      if(el.type==='radio' || el.type==='checkbox'){
+        const els=[...form.querySelectorAll(`[name="${k}"]`)];
+        els.forEach(r=>{ r.checked = (r.value===v || (Array.isArray(v) && v.includes(r.value))); });
+      }else{
+        if(el.length && el[0]?.type==='radio') return;
+        if(Array.isArray(v)) v=v[0];
+        el.value=v;
+      }
+    });
+  }
+  form.addEventListener('input', saveDraft);
+
+  function addRow(tbodyId, cells){
+    const tbody=document.querySelector(`#${tbodyId} tbody`);
+    const tr=document.createElement('tr');
+    cells.forEach(html=>{ const td=document.createElement('td'); td.innerHTML=html; tr.appendChild(td); });
+    const td=document.createElement('td');
+    td.innerHTML='<button type="button" class="btnlink" onclick="this.closest(\'tr\').remove()">Remove</button>';
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+  }
+  window.addAffiliate=function(){ addRow('affiliatesTable',['<input name="aff_company[]" type="text">','<input name="aff_address[]" type="text">','<input name="aff_relationship[]" type="text">']); }
+  window.addBuyerRow=function(tableId){ addRow(tableId,['<input name="'+tableId+'_name[]" type="text">','<input name="'+tableId+'_ship[]" type="number" min="0" step="0.01">','<input name="'+tableId+'_term[]" type="text">','<input name="'+tableId+'_limit[]" type="number" min="0" step="0.01">']); }
+  window.addSalesRow=function(){
+    const holder=document.getElementById('salesRepeater');
+    const wrap=document.createElement('div'); wrap.className='card';
+    wrap.innerHTML=`
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:12px">
+        <div class="col-3"><label>Year</label><input type="number" name="sales_year[]" min="1900" max="2100"></div>
+        <div class="col-3"><label>Domestic Sales ($)</label><input type="number" name="sales_domestic[]" min="0" step="0.01"></div>
+        <div class="col-3"><label>Domestic Bad Debt ($)</label><input type="number" name="bd_domestic[]" min="0" step="0.01"></div>
+        <div class="col-3"><label>Foreign Sales ($)</label><input type="number" name="sales_foreign[]" min="0" step="0.01"></div>
+        <div class="col-3"><label>Foreign Bad Debt ($)</label><input type="number" name="bd_foreign[]" min="0" step="0.01"></div>
+        <div class="col-12"><button type="button" class="btnlink" onclick="this.closest('.card').remove()">Remove year</button></div>
+      </div>`;
+    holder.appendChild(wrap);
+    postSize();
+  }
+
+  showStep(1);
+  restoreDraft();
+  addAffiliate(); addBuyerRow('domesticBuyers'); addBuyerRow('foreignBuyers'); addSalesRow(); addSalesRow();
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    if(document.getElementById('hp').value) return;
+    if(!validateSection(step)) return;
+    const submitBtn=document.getElementById('submitBtn');
+    submitBtn.disabled=true; submitBtn.textContent='Submitting…';
+    document.getElementById('formError').style.display = 'none';
+
+    const fd=new FormData(form);
+    const files=document.getElementById('attachments')?.files || [];
+    const filesPayload=[];
+    for(const f of files){
+      if(f.size>10*1024*1024){ alert('File too large: '+f.name); submitBtn.disabled=false; submitBtn.textContent='Submit Application'; return; }
+      const buf=await f.arrayBuffer();
+      filesPayload.push({filename:f.name, content:btoa(String.fromCharCode(...new Uint8Array(buf))), type:f.type||'application/octet-stream'});
+    }
+
+    const payload={};
+    fd.forEach((v,k)=>{ if(k==='attachments') return; if(payload[k]){ if(!Array.isArray(payload[k])) payload[k]=[payload[k]]; payload[k].push(v);} else payload[k]=v; });
+    payload['_meta']={ userAgent:navigator.userAgent, submittedAt:new Date().toISOString(), page:location.href };
+    payload['_files']=filesPayload;
+
+    try{
+      const res=await fetch('/api/send-smtp',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload)
+      });
+      if(!res.ok) throw new Error('Network response not ok');
+      localStorage.removeItem(saveKey);
+      form.reset();
+      showStep(1);
+      document.getElementById('successMsg').classList.remove('hidden');
+      submitBtn.textContent='Submitted ✓';
+      postSize();
+    }catch(err){
+      console.error(err);
+      document.getElementById('formError').style.display = 'block';
+      submitBtn.disabled=false; submitBtn.textContent='Submit Application';
+    }
+  });
+</script>
+</body>
+</html>
