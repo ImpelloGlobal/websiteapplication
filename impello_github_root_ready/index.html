@@ -251,19 +251,47 @@
   nextBtn.addEventListener('click',()=>{ if(!validateSection(step)) return; showStep(Math.min(total,step+1)); });
 
   function validateSection(stepNum){
-    const current=sections.find(s=>+s.dataset.step===stepNum);
-    const required=[...current.querySelectorAll('[required]')];
-    let ok=true;
-    required.forEach(el=>{
-      el.classList.remove('invalid');
-      if(el.type==='checkbox' || el.type==='radio'){
-        const anyChecked = !!form.querySelector(`[name="${el.name}"]:checked`);
-        if(!anyChecked){ ok=false; }
-      }else if(!el.value){ ok=false; }
-      if(!ok) el.style.borderColor = ok ? '#dbe3ee' : '#b00020';
-    });
-    document.getElementById('formError').style.display = ok ? 'none' : 'block';
-    return ok;
+  const current = sections.find(s => +s.dataset.step === stepNum);
+  const required = [...current.querySelectorAll('[required]')];
+  let ok = true;
+  let firstBad = null;
+  const missing = [];
+
+  required.forEach(el => {
+    // reset styles
+    el.style.borderColor = '#dbe3ee';
+    const label = current.querySelector(`label[for="${el.id}"]`) || el.closest('div')?.querySelector('label');
+    const niceName = (label?.innerText || el.name || 'This field').replace(/\s*\*$/, '');
+
+    let valid = true;
+    if (el.type === 'checkbox' || el.type === 'radio') {
+      const anyChecked = !!form.querySelector(`[name="${el.name}"]:checked`);
+      valid = anyChecked;
+    } else {
+      valid = !!el.value;
+    }
+
+    if (!valid) {
+      ok = false;
+      missing.push(niceName);
+      el.style.borderColor = '#b00020';
+      if (!firstBad) firstBad = el;
+    }
+  });
+
+  const err = document.getElementById('formError');
+  if (!ok) {
+    err.textContent = "Please complete: " + missing.join(', ') + ".";
+    err.style.display = 'block';
+    if (firstBad) {
+      firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      try { firstBad.focus(); } catch(e) {}
+    }
+  } else {
+    err.style.display = 'none';
+  }
+  return ok;
+}
   }
 
   function saveDraft(){
